@@ -125,10 +125,10 @@ class App extends React.Component {
         return (
             <div>
                 <div className={'email-header'}>
-                    <span style={{fontWeight:'bold'}}>Subject</span> {this.state.subject}<br/>
-                    <span style={{fontWeight:'bold'}}>To</span> {this.state.to}<br/>
-                    <span style={{fontWeight:'bold'}}>From</span> {this.state.from}<br/>
-                    <span style={{fontWeight:'bold'}}>On</span> {this.state.date}<br/>
+                    <span style={{fontWeight:'bold'}}>Subject: </span> {this.state.subject}<br/>
+                    <span style={{fontWeight:'bold'}}>To: </span> {this.state.to}<br/>
+                    <span style={{fontWeight:'bold'}}>From: </span> {this.state.from}<br/>
+                    <span style={{fontWeight:'bold'}}>On: </span> {this.state.date}<br/>
                 </div>
 
                 <div className={'email-body'}>
@@ -157,12 +157,10 @@ class App extends React.Component {
     renderInbox = () => {
         return (
             <div className={'inbox'}>
-
-
-                    <br/>
                     <div className={'upload-container'}>
                         <h2>Inbox</h2>
-                        <br/>
+                        <hr/>
+
                         <input type="file"  onChange={this.onFileSelect} className={'horizontal-center'}/>
                         <br/><br/>
                         <Button size="lg" block onClick={this.onFileUpload} >
