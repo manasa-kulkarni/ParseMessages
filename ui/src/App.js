@@ -1,7 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
 
 class App extends React.Component {
@@ -14,7 +18,8 @@ class App extends React.Component {
             date: '',
             subject: '',
             content: "",
-            fileParsed: false
+            fileParsed: false,
+            inbox: []
         }
     }
 
@@ -39,14 +44,17 @@ class App extends React.Component {
         axios.post("http://localhost:8080/api/message", formData)
         .then((res) => {
             if (res.status === 201) {
-                this.setState({
+                this.setState(state => ({
                     to: res.data.to,
                     from: res.data.from,
                     subject: res.data.subject,
                     date: res.data.date,
                     content: res.data.body,
-                    fileParsed:true
-                })
+                    fileParsed:true,
+                    inbox: state.inbox.concat(res.data),
+                    selectedFile: null
+                }));
+
             }
             else {
                 alert("Something went wrong! File could not be parsed")
@@ -54,15 +62,13 @@ class App extends React.Component {
         })
     }
 
-
-
     renderEmailBody = () => {
         if (this.state.fileParsed) {
             return (
                 //Render multipart content
                 <div>
                 {this.state.content.map(c => {
-                    var key = Object.keys(c)[0]
+                    var key = Object.keys(c)[0];
                     if (key.includes("multipart/alternative")) {
                         //Do not display multipart
                         return null;
@@ -70,24 +76,25 @@ class App extends React.Component {
                     else if (key.includes("text/plain")) {
                         //Display Plain Text
                         return (
+                            //For each new line in plain text, render in div for line break
                             <div>
-                                //For each new line in plain text, render in div for line break
                                 {c[key].split("\n").map((i,k) => {
                                     //Create hyperlinks
+                                    var url = ""
                                     if (i.match(/(?=https:\/\/).*(?=\s)/ig) !== null && i.match(/<http/ig) === null) {
-                                        var url = i.match(/(?=https:\/\/).*(?=\s)/ig)[0];
+                                        url = i.match(/(?=https:\/\/).*(?=\s)/ig)[0];
                                         return  <div key={k}><a href={url}> {i.replace(url, "") }</a><br/></div>
                                     }
                                     else if (i.match(/https:\/\/.*/ig) !== null && i.match(/<http/ig) === null) {
-                                        var url = i.match(/https:\/\/.*/ig)[0];
+                                        url = i.match(/https:\/\/.*/ig)[0];
                                         return  <div key={k}><a href={url}> here</a><br/></div>
                                     }
                                     else if (i.match(/(?=http:\/\/).*(?=\s)/ig) !== null && i.match(/<http/ig) === null) {
-                                        var url = i.match(/(?=http:\/\/).*(?=\s)/ig)[0];
+                                        url = i.match(/(?=http:\/\/).*(?=\s)/ig)[0];
                                         return  <div key={k}><a href={url}> {i.replace(url, "") }</a><br/></div>
                                     }
                                     else if (i.match(/http:\/\/.*/ig) !== null && i.match(/<http/ig) === null) {
-                                        var url = i.match(/http:\/\/.*/ig)[0];
+                                        url = i.match(/http:\/\/.*/ig)[0];
                                         return  <div key={k}><a href={url}> here</a><br/></div>
                                     }
                                     else {
@@ -97,7 +104,6 @@ class App extends React.Component {
                             </div>);
                     }
                     else if (key.includes("text/html")) {
-                        //Set innerHTML from text/html data
                         return <div dangerouslySetInnerHTML={{__html: c[key]}}/>
                     }
                 })}
@@ -110,34 +116,94 @@ class App extends React.Component {
     }
 
     //Display Email Message Header Info (To, From, Date, Subject )
-    renderEmailHeader = () => {
-        if  (this.state.fileParsed) {
-            return (
-                <div>
-                    To: {this.state.to}<br/>
-                    From: {this.state.from}<br/>
-                    Date: {this.state.date}<br/>
-                    Subject: {this.state.subject}<br/>
-                </div>
-            )
-        }
-        else {
-            return null;
-        }
+    renderEmail = () => {
 
+        return (
+            <div>
+                <div className={'email-header'}>
+                    <span style={{fontWeight:'bold'}}>Subject</span> {this.state.subject}<br/>
+                    <span style={{fontWeight:'bold'}}>To</span> {this.state.to}<br/>
+                    <span style={{fontWeight:'bold'}}>From</span> {this.state.from}<br/>
+
+
+                    <span style={{fontWeight:'bold'}}>On</span> {this.state.date}<br/>
+                </div>
+                <div className={'email-body'}>
+                    {this.renderEmailBody()}
+                </div>
+
+            </div>
+        )
+    }
+
+    updateActiveMsg = (i) => {
+        let active = this.state.inbox[i];
+
+        this.setState(state => ({
+            to: active.to,
+            from: active.from,
+            subject: active.subject,
+            date: active.date,
+            content: active.body,
+
+        }));
+
+    }
+
+    renderInbox = () => {
+        return (
+            <div className={'inbox'}>
+                <h2>Inbox</h2>
+
+                    <div className={'upload-container'}>
+                        <input type="file" onChange={this.onFileSelect} className={'horizontal-center'}/>
+                        <br/><br/>
+                        <Button size="lg" block onClick={this.onFileUpload} >
+                            <i className="fa fa-upload"/>
+                        </Button>
+
+                    </div>
+                    {this.state.inbox.map((e, i) => {
+                        return <div className={'msg-item'} onClick={() => {this.updateActiveMsg(i)}}>{e.subject}</div>
+                    })}
+
+            </div>
+        )
     }
 
     render() {
         return (
-          <div className="App">
-            <input type="file" onChange={this.onFileSelect}/>
-            <button onClick={this.onFileUpload}>View File</button>
-            {this.renderEmailHeader()}
-            {this.renderEmailBody()}
-          </div>
-        );
+            <Container className="app-container">
+                <Row className="justify-content-md-center">
+                    <h1>Message Viewer</h1>
+                </Row>
+                <Row>
+                    <Col sm={4}>{this.renderInbox()}</Col>
+                    <Col sm={8}>
+                        {this.state.fileParsed ? this.renderEmail() :
+
+                            <div class="vertical-center horizontal-center upload-screen">
+                                <i className="fa fa-envelope"/>
+                                <br/>
+                                Upload an Item To Read
+                            </div>
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        )
     }
 
+
+/*
+<div className="App">
+
+<Col sm={4}>Inbox</Col>
+<Col sm={8}>Message
+  {this.renderEmailHeader()}
+  {this.renderEmailBody()}
+</div>
+*/
 }
 
 export default App;
