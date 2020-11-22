@@ -54,19 +54,19 @@ router.post('/message', (req, res) => {
             if (!foundContent) {
                 //Parse Message Header Info (To, From, Subject, Date and Message ID)
                 if (line.toLowerCase().startsWith('to:')) {
-                    to = line.match(/(?<=To:)(.*?)(?=;|\n)/ig);
+                    to = line.match(/(?<=To:)(.*?)(?=;|\n)/ig)[0];
                 }
                 else if (line.toLowerCase().startsWith('from:')) {
-                    from = line.match(/(?<=From:)(.*?)(?=;|\n)/ig);
+                    from = line.match(/(?<=From:)(.*?)(?=;|\n)/ig)[0];
                 }
                 else if (line.toLowerCase().startsWith('date:')) {
-                    date = line.match(/(?<=Date:)(.*?)(?=;|\n)/ig);
+                    date = line.match(/(?<=Date:)(.*?)(?=;|\n)/ig)[0];
                 }
                 else if (line.toLowerCase().startsWith('subject:')) {
-                    subject = line.match(/(?<=Subject:)(.*?)(?=;|\n)/ig);
+                    subject = line.match(/(?<=Subject:)(.*?)(?=;|\n)/ig)[0];
                 }
                 else if (line.toLowerCase().startsWith('message-id:')) {
-                    messageID = line.match(/(?<=Message-ID:)(.*?)(?=;|\n)/ig);
+                    messageID = line.match(/(?<=Message-ID:)(.*?)(?=;|\n)/ig)[0];
                 }
                 //When line contains "content-type", begin parsing body of message,
                 //store current contentType

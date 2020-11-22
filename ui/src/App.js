@@ -44,12 +44,14 @@ class App extends React.Component {
         axios.post("http://localhost:8080/api/message", formData)
         .then((res) => {
             if (res.status === 201) {
+                console.log(res.data)
                 this.setState(state => ({
                     to: res.data.to,
                     from: res.data.from,
                     subject: res.data.subject,
                     date: res.data.date,
                     content: res.data.body,
+                    id: res.data.messageID,
                     fileParsed:true,
                     inbox: state.inbox.concat(res.data),
                     selectedFile: null
@@ -118,16 +120,17 @@ class App extends React.Component {
     //Display Email Message Header Info (To, From, Date, Subject )
     renderEmail = () => {
 
+        console.log(this.state.id)
+
         return (
             <div>
                 <div className={'email-header'}>
                     <span style={{fontWeight:'bold'}}>Subject</span> {this.state.subject}<br/>
                     <span style={{fontWeight:'bold'}}>To</span> {this.state.to}<br/>
                     <span style={{fontWeight:'bold'}}>From</span> {this.state.from}<br/>
-
-
                     <span style={{fontWeight:'bold'}}>On</span> {this.state.date}<br/>
                 </div>
+
                 <div className={'email-body'}>
                     {this.renderEmailBody()}
                 </div>
@@ -145,6 +148,7 @@ class App extends React.Component {
             subject: active.subject,
             date: active.date,
             content: active.body,
+            id: active.messageID,
 
         }));
 
@@ -153,18 +157,22 @@ class App extends React.Component {
     renderInbox = () => {
         return (
             <div className={'inbox'}>
-                <h2>Inbox</h2>
 
+
+                    <br/>
                     <div className={'upload-container'}>
-                        <input type="file" onChange={this.onFileSelect} className={'horizontal-center'}/>
+                        <h2>Inbox</h2>
+                        <br/>
+                        <input type="file"  onChange={this.onFileSelect} className={'horizontal-center'}/>
                         <br/><br/>
                         <Button size="lg" block onClick={this.onFileUpload} >
                             <i className="fa fa-upload"/>
                         </Button>
+                        <hr/>
 
                     </div>
                     {this.state.inbox.map((e, i) => {
-                        return <div className={'msg-item'} onClick={() => {this.updateActiveMsg(i)}}>{e.subject}</div>
+                        return <div className={`${this.state.id === e.messageID ? 'active' : null } msg-item`} onClick={() => {this.updateActiveMsg(i)}}>{e.from}</div>
                     })}
 
             </div>
@@ -174,15 +182,15 @@ class App extends React.Component {
     render() {
         return (
             <Container className="app-container">
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center title" >
                     <h1>Message Viewer</h1>
                 </Row>
                 <Row>
-                    <Col sm={4}>{this.renderInbox()}</Col>
-                    <Col sm={8}>
+                    <Col sm={4} style={{paddingLeft:0, paddingRight:0}}>{this.renderInbox()}</Col>
+                    <Col sm={8} style={{paddingRight:0, paddingLeft:0, borderRight: "1px solid #3D5E75"}} >
                         {this.state.fileParsed ? this.renderEmail() :
 
-                            <div class="vertical-center horizontal-center upload-screen">
+                            <div class="vertical-center horizontal-shift upload-screen">
                                 <i className="fa fa-envelope"/>
                                 <br/>
                                 Upload an Item To Read
