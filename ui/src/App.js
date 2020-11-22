@@ -59,8 +59,8 @@ class App extends React.Component {
     renderEmailBody = () => {
         if (this.state.fileParsed) {
             return (
-                <div>
                 //Render multipart content
+                <div>
                 {this.state.content.map(c => {
                     var key = Object.keys(c)[0]
                     if (key.includes("multipart/alternative")) {
