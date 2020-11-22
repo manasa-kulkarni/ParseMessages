@@ -112,7 +112,8 @@ router.post('/message', (req, res) => {
                             //.msg data contains "3D" before many html field elements.
                             //This causes inaccurate rendering of html elements.
                             //For example 3DFFFF renders an incorrect cyan color instead of FFFF color (black)
-                            content += line.replaceAll('=3D', '=')
+                            content += line.replace(/=3D/g,"=")
+
                         }
                     }
                     else if (line.search(/--=(.*?)/ig) !== -1 )
