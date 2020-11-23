@@ -22,7 +22,7 @@ git clone https://github.com/manasa-kulkarni/ParseMessages.git
 cd ParseMessages
 docker-compose up --build
 ```
-
+**Navigate to http://localhost:3000**
 ## Run the Application (Using NPM - Not recommended as npm version conflicts can lead to issues)
 ```bash
 cd ParseMessages/api
@@ -33,7 +33,7 @@ In another Terminal:
 cd ParseMessages/ui
 npm start
 ```
-
+**Navigate to http://localhost:3000**
 ## Other Notes
 This program was created to parse .msg files. This program is intended to be used with most of the .msg file subset I was given. 
 However, not all .msg files are created according to the same standards, and this may lead to some misrendered emails when opening certain .msg files.
