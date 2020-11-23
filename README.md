@@ -34,6 +34,5 @@ npm start
 ```
 
 ## Other Notes
-This program was created to parse .msg files. However, not all .msg files are created
-according to the same standards. This program is intended to be used with most of the
-.msg file subset I was given. This may lead to some non-accurately rendered emails when opening certain .msg files.
+This program was created to parse .msg files. This program is intended to be used with most of the .msg file subset I was given. 
+However, not all .msg files are created according to the same standards, and this may lead to some misrendered emails when opening certain .msg files.
