@@ -15,6 +15,7 @@
     --color_D: #3D5E75;
     --color_E: #2B83C2;
     --color_B_light: #bee1fa;
+    --color_B_lighter: #e8f2fa;
 
 }
 
@@ -64,12 +65,16 @@
     color: var(--color_A)
 }
 
+.message-container {
+    border-bottom: 1px solid var(--color_D);
+}
 
 .email-body {
     height: 1000px;
     overflow: scroll;
     padding-left: 16px;
-    margin-left: 32px;
+    margin-top: 32px;
+
 }
 
 .email-header {
@@ -87,7 +92,9 @@
     background-color: white;
     border-left: 1px solid var(--color_D);
     border-right: 1px solid var(--color_D);
-    min-height: 100vh;
+    border-bottom: 1px solid var(--color_D);
+    height: 100%;
+
 }
 
 .remove-padding {
@@ -99,11 +106,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    height: auto;
     position: relative;
     padding:16px;
-
-
 }
 
 .upload-container h2 {
@@ -121,17 +125,17 @@
     white-space: nowrap;
     overflow: hidden;
     padding: 16px;
-    border: 1.5px solid var(--color_C);
-    border-radius: 11px 11px 11px 11px;
-
+    border-bottom: 1.5px solid var(--color_B_light);
 }
 
+
+
 .active {
-    background-color: var(--color_B);;
+    background-color: var(--color_B_light);
 }
 
 .msg-item:hover {
-	background-color: var(--color_B_light);
+	background-color: var(--color_B_lighter);
     opacity: 1;
     cursor: pointer;
 }

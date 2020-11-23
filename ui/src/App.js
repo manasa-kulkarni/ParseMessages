@@ -160,8 +160,9 @@ class App extends React.Component {
                     <div className={'upload-container'}>
                         <h2>Inbox</h2>
                         <hr/>
-
-                        <input type="file"  onChange={this.onFileSelect} className={'horizontal-center'}/>
+                        <div style={{width: 200}}>
+                            <input type="file"  onChange={this.onFileSelect} className={'horizontal-center'}/>
+                        </div>
                         <br/><br/>
                         <Button size="lg" block onClick={this.onFileUpload} >
                             <i className="fa fa-upload"/>
@@ -169,7 +170,7 @@ class App extends React.Component {
                         <hr/>
 
                     </div>
-                    {this.state.inbox.map((e, i) => {
+                    {this.state.inbox.slice(0).reverse().map((e, i) => {
                         return <div className={`${this.state.id === e.messageID ? 'active' : null } msg-item`} onClick={() => {this.updateActiveMsg(i)}}>{e.from}</div>
                     })}
 
@@ -185,7 +186,7 @@ class App extends React.Component {
                 </Row>
                 <Row>
                     <Col sm={4} style={{paddingLeft:0, paddingRight:0}}>{this.renderInbox()}</Col>
-                    <Col sm={8} style={{paddingRight:0, paddingLeft:0, borderRight: "1px solid #3D5E75"}} >
+                    <Col sm={8} style={{paddingRight:0, paddingLeft:0, borderRight: "1px solid #3D5E75", borderBottom: "1px solid #3D5E75"}} >
                         {this.state.fileParsed ? this.renderEmail() :
 
                             <div class="vertical-center horizontal-shift upload-screen">
