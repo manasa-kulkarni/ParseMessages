@@ -1,6 +1,5 @@
 # Message Viewer
 
-Foobar is a Python library for dealing with word pluralization.
 Message Viewer is a program that takes in ".msg" inputs and displays the
 contents of the message as it would be displayed in an email viewer (such as Microsoft Outlook).
 
