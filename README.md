@@ -19,7 +19,7 @@ git clone https://github.com/manasa-kulkarni/ParseMessages.git
 ## Run the Application (Using Docker - Recommended)
 ```bash
 cd ParseMessages
-docker-compose --build
+docker-compose up --build
 ```
 
 ## Run the Application (Using NPM - Not recommended as npm version conflicts can lead to issues)
